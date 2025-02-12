@@ -1,0 +1,27 @@
+<h1>New Review for <%= @restaurant.name %></h1>
+
+<%= form_with model: [@restaurant, @review], local: true do |f| %>
+  <% if @review.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% @review.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :rating, 'Rating (0-5)' %>
+    <%= f.number_field :rating, class: 'form-control', min: 0, max: 5 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :content, 'Review Content' %>
+    <%= f.text_area :content, class: 'form-control' %>
+  </div>
+
+  <%= f.submit 'Submit Review', class: 'btn btn-primary' %>
+<% end %>
+
+<%= link_to 'Back to Restaurant', restaurant_path(@restaurant), class: 'btn btn-secondary' %>

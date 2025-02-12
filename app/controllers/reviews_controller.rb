@@ -1,7 +1,35 @@
 class ReviewsController < ApplicationController
-  def new  def new
-    # We need @restaurant in our `simple_form_for`
-    @restaurant = Restaurant.find(params[:restaurant_id])
+  before_action :set_restaurant
+
+  def new
     @review = Review.new
+  end
+
+  def create
+    @review = Review.new(review_params)
+    @review.restaurant = @restaurant
+    if @review.save
+      redirect_to restaurant_path(@restaurant)
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def show
+
+  end
+
+
+
+  private
+
+  # Set the restaurant based on the ID from the URL
+  def set_restaurant
+    @restaurant = Restaurant.find(params[:restaurant_id])
+  end
+
+   # Strong params to permit only the necessary attributes
+   def review_params
+    params.require(:review).permit(:rating, :content)
   end
 end
